@@ -185,3 +185,44 @@ STRIPE_TEST_SECRET_KEY=os.environ.get('STRIPE_TEST_SECRET_KEY')
 import socket
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
+
+ENVIRONMENT = os.environ.get('ENVIRONMENT', default='development')
+ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1']
+
+# production
+if ENVIRONMENT == 'production':
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 3600 
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True 
+    SECURE_HSTS_PRELOAD = True 
+    SECURE_CONTENT_TYPE_NOSNIFF = True 
+    SESSION_COOKIE_SECURE = True 
+    CSRF_COOKIE_SECURE = True 
+    SECURE_REFERRER_POLICY = 'no-referrer'
+    """
+no-referrer
+Instructs the browser to send no referrer for links clicked on this site.
+
+no-referrer-when-downgrade
+Instructs the browser to send a full URL as the referrer, but only when no protocol downgrade occurs.
+
+origin
+Instructs the browser to send only the origin, not the full URL, as the referrer.
+
+origin-when-cross-origin
+Instructs the browser to send the full URL as the referrer for same-origin links, and only the origin for cross-origin links.
+
+same-origin
+Instructs the browser to send a full URL, but only for same-origin links. No referrer will be sent for cross-origin links.
+
+strict-origin
+Instructs the browser to send only the origin, not the full URL, and to send no referrer when a protocol downgrade occurs.
+
+strict-origin-when-cross-origin
+Instructs the browser to send the full URL when the link is same-origin and no protocol downgrade occurs; send only the origin when the link is cross-origin and no protocol downgrade occurs; and no referrer when a protocol downgrade occurs.
+
+unsafe-url
+Instructs the browser to always send the full URL as the referrer.
+    """
